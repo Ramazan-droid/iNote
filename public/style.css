@@ -62,12 +62,40 @@ nav ul li {
 nav ul li a {
     text-decoration: none;
     padding: 10px 20px;
-    background-color: #4CAF50; /* green button */
+    background-color: #274881; /* green button */
     color: white;
     border-radius: 5px;
     transition: background-color 0.3s;
 }
 
 nav ul li a:hover {
-    background-color: #45a049; /* darker green on hover */
+    background-color: #210d54; /* darker green on hover */
+}
+
+
+
+
+
+section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+section ul li {
+    margin-bottom: 10px; /* space between links */
+}
+
+section ul li a {
+    display: block;        /* makes link fill width and stack */
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #274881;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+section  ul li a:hover {
+    background-color: #210d54;
 }

@@ -30,6 +30,11 @@ The project focuses on the development of a digital note-taking system. The main
 - /about
 - /contact
 
+## Assignment 2 Part 1 update:
+- /search?name query parameter
+- /task/:id route parameter id
+- /api/info project information in json format
+
 ## Form details
 - Form contains:
     - -name;
