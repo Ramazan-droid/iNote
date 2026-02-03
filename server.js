@@ -48,6 +48,11 @@ app.use(session({
     secure: process.env.NODE_ENV === "production"
   }
 }))
+// Make session user available in all templates
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null
+  next()
+})
 
 // -------------------- HELPER MIDDLEWARE --------------------
 function authMiddleware(req, res, next) {
