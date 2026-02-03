@@ -43,7 +43,6 @@ app.use(session({
   secret: process.env.SESSION_SECRET || "secret123",
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: uri, dbName: "iNoteDB" }),
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production"
