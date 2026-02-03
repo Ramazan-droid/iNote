@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .note {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .note h3 {
+      margin: 0;
+      color: #333;
+    }
+
+    .note p {
+      color: #666;
+    }
+
+    .buttons {
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .btn-update {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-pin {
+      background: #2196f3;
+      color: white;
+    }
+
+    .pinned {
+      border-left: 6px solid #ff9800;
+    }
+    .btn-delete {
+        background: #f44336;
+        color: white;
+    }
+    .btn-home {
+        background: #555;
+        color: white;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="topbar">
+        <h1>All Notes</h1>
+
+        <div class="menu">
+            <a href="/">
+                <button class="btn btn-home">Home</button>
+            </a>
+
+            <a href="/addnote">
+                <button class="btn btn-add">Add Note</button>
+            </a>
+
+            <a href="/allnotes?sort=newest">
+                <button class="btn btn-sort">Newest</button>
+            </a>
+
+            <a href="/allnotes?sort=oldest">
+                <button class="btn btn-sort">Oldest</button>
+            </a>
+        </div>
+    </div>
+
+
+  <% notes.forEach(note => { %>
+    <div class="note <%= note.is_pinned ? 'pinned' : '' %>">
+      <h3><%= note.title %></h3>
+      <p><%= note.content %></p>
+
+      <div class="buttons">
+
+        <!-- UPDATE BUTTON -->
+        <form action="/updatenote/<%= note._id %>" method="GET" style="display:inline;">
+          <button class="btn btn-update">Update</button>
+        </form>
+
+        <!-- PIN BUTTON -->
+        <form action="/pinnote/<%= note._id %>" method="POST" style="display:inline;">
+          <button class="btn btn-pin">
+            <%= note.is_pinned ? "Unpin" : "Pin" %>
+          </button>
+        </form>
+
+        <form action="/deletenote/<%= note._id %>" method="POST" style="display:inline;">
+            <button class="btn btn-delete">Delete</button>
+        </form>
+
+
+      </div>
+    </div>
+  <% }) %>
+
+</div>
+
+</body>
+</html>

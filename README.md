@@ -35,6 +35,12 @@ The project focuses on the development of a digital note-taking system. The main
 - /task/:id route parameter id
 - /api/info project information in json format
 
+## Assignment 2 Part 2 update:
+- Dababase used:SQLite
+- Table contains:title,text
+- routes:/tasks;/tasks/:id;post(/tasks);put(/tasks/:id);delete(/tasks/:id)
+
+
 ## Form details
 - Form contains:
     - -name;

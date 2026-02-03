@@ -1,36 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <!-- Link to external CSS -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main Page</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      color: #333;
+    }
+
+    .hero p {
+      color: #555;
+      font-size: 1.1rem;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+
+    .btn-notes {
+      background: #4caf50;
+    }
+
+    .btn-about {
+      background: #2196f3;
+    }
+
+    .btn-contact {
+      background: #f44336;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
-        
-    </nav>
 
-    <!-- Introduction -->
-    <section>
-        <h1>Welcome to Our Website!</h1>
-        <p>This is the main page of our website. Here you can find information about our services, team, and contact details.</p>
-    </section>
-    <section>   
-        <ul>
-            <li><a href="/search?title=cleaning">/search?title=cleaning</a></li><br>
-            <li><a href="/search?">/search?</a></li><br>
-            <li><a href="/task/:2" >/task/:2</a></li><br>
-            <li><a href="/api/info" /*target="_blank"*/>/api/info</a></li>
-        </ul>
-    </section>
-    </body>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <h1>Welcome to iNote</h1>
+      <p>A simple and lightweight note app built with Express and MongoDB.</p>
+    </div>
+
+    <div class="buttons">
+      <a class="btn btn-notes" href="/allnotes">All Notes</a>
+      <a class="btn btn-about" href="/about">About</a>
+      <a class="btn btn-contact" href="/contact">Contact</a>
+    </div>
+
+    <div class="footer">
+      <p>Tip: You can pin notes to keep important ones on top.</p>
+    </div>
+  </div>
+
 </body>
 </html>
