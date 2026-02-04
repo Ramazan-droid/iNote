@@ -90,20 +90,27 @@ app.post('/signup', async (req, res) => {
 // Login
 app.get('/login', (req, res) => res.render('login'))
 app.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body
-    const users = db.collection('users')
-    const user = await users.findOne({ username })
-    if (!user) return res.send("Invalid credentials")
+  const { username, password } = req.body
 
-    const match = await bcrypt.compare(password, user.password)
-    if (!match) return res.send("Invalid credentials")
+  const users = db.collection('users')
+  const user = await users.findOne({ username })
 
-    req.session.userId = user._id
-    res.redirect('/allnotes')
-  } catch (err) {
-    res.status(500).send("Login error")
+  if (!user) {
+    return res.status(401).render('login', { error: 'Invalid credentials' })
   }
+
+  const match = await bcrypt.compare(password, user.password)
+  if (!match) {
+    return res.status(401).render('login', { error: 'Invalid credentials' })
+  }
+
+  // ✅ THIS IS THE IMPORTANT PART
+  req.session.user = {
+    id: user._id,
+    username: user.username
+  }
+
+  res.redirect('/allnotes')
 })
 
 // Logout
