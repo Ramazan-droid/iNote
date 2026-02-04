@@ -56,7 +56,9 @@ app.use((req, res, next) => {
 
 // -------------------- HELPER MIDDLEWARE --------------------
 function authMiddleware(req, res, next) {
-  if (!req.session.userId) return res.status(401).send("Unauthorized")
+  if (!req.session.user) {
+    return res.status(401).send("Unauthorized")
+  }
   next()
 }
 
@@ -80,7 +82,10 @@ app.post('/signup', async (req, res) => {
     const hashed = await bcrypt.hash(password, 10)
     const result = await users.insertOne({ username, password: hashed, created_at: new Date() })
 
-    req.session.userId = result.insertedId
+    req.session.user = {
+      id: result.insertedId,
+      username
+    }
     res.redirect('/allnotes')
   } catch (err) {
     res.status(500).send("Error creating user")
