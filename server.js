@@ -45,9 +45,14 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production"
+    secure: false,
+    sameSite:'lax'
   }
 }))
+app.get('/debug-session', (req, res) => {
+  res.json(req.session)
+})
+
 // Make session user available in all templates
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null
