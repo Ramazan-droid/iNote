@@ -89,21 +89,36 @@ app.post('/signup', async (req, res) => {
     if (!username || !password) return res.send("Username & password required")
 
     const users = db.collection('users')
+
+    // Check if username already exists
     const existing = await users.findOne({ username })
     if (existing) return res.send("Username already taken")
 
+    // Hash the password
     const hashed = await bcrypt.hash(password, 10)
-    const result = await users.insertOne({ username, password: hashed, created_at: new Date() })
 
+    // Insert user with role = 'user' by default
+    const result = await users.insertOne({
+      username,
+      password: hashed,
+      role: "user",        // ✅ default role
+      created_at: new Date()
+    })
+
+    // Save session with id, username, role
     req.session.user = {
       id: result.insertedId,
-      username
+      username,
+      role: "user"         // ✅ include role in session
     }
+
     res.redirect('/allnotes')
   } catch (err) {
+    console.error(err)
     res.status(500).send("Error creating user")
   }
 })
+
 
 // Login
 app.get('/login', (req, res) => res.render('login'))
