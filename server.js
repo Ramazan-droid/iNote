@@ -114,7 +114,7 @@ app.post('/login', async (req, res) => {
     return res.status(401).render('login', { error: 'Invalid credentials' })
   }
 
-  // ✅ THIS IS THE IMPORTANT PART
+
   req.session.user = {
     id: user._id,
     username: user.username
@@ -131,15 +131,15 @@ app.post('/logout', (req, res) => {
   })
 })
 
-// -------------------- STATIC PAGES --------------------
+
 app.get('/', (req, res) => res.sendFile(__dirname + '/views/index.html'))
 app.get('/about', (req, res) => res.sendFile(__dirname + '/views/about.html'))
 app.get('/contact', (req, res) => res.sendFile(__dirname + '/views/contact.html'))
 
-// -------------------- CRUD ROUTES --------------------
+
 
 // All Notes
-app.get('/allnotes', async (req, res) => {
+app.get('/allnotes',authMiddleware, async (req, res) => {
   try {
     if (!db) return res.status(500).send("Database not connected")
     const notes = db.collection('notes')
@@ -149,8 +149,8 @@ app.get('/allnotes', async (req, res) => {
     else if (sort === "newest") sortObj = { is_pinned: -1, created_at: -1 }
     else sortObj = { is_pinned: -1, created_at: -1 }
 
-    const allnotes = await notes.find().sort(sortObj).toArray()
-    res.render('allnotes', { notes: allnotes })
+    const allnotes = await notes.find({ userId: req.session.user.id }).sort(sortObj).toArray()
+    res.render('allnotes', { notes: allnotes,user: req.session.user })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
@@ -161,19 +161,23 @@ app.get('/addnote', (req, res) => res.sendFile(__dirname + "/views/addnote.html"
 app.post('/addnote', authMiddleware, async (req, res) => {
   try {
     const notes = db.collection('notes')
+
     const newnote = {
       title: req.body.title,
       content: req.body.content,
+      userId: req.session.user.id,   // 👈 AUTO-SET USER
       created_at: new Date(),
       updated_at: new Date(),
       is_pinned: req.body.is_pinned === "on"
     }
+
     await notes.insertOne(newnote)
     res.redirect("/allnotes")
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
 })
+
 
 // Update Note
 app.get('/updatenote/:id', authMiddleware, async (req, res) => {

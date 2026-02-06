@@ -40,6 +40,9 @@ The project focuses on the development of a digital note-taking system. The main
 - Table contains:title,text
 - routes:/tasks;/tasks/:id;post(/tasks);put(/tasks/:id);delete(/tasks/:id)
 
+## Assignment 4
+- deployment link :[link](https://inote-production.up.railway.app/)
+
 
 ## Form details
 - Form contains:
