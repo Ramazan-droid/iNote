@@ -67,6 +67,14 @@ function authMiddleware(req, res, next) {
   next()
 }
 
+function requireLogin(req, res, next) {
+  if (!req.session.user) {
+    return res.render("login-required")
+  }
+  next()
+}
+
+
 // -------------------- VIEW ENGINE --------------------
 app.set('view engine', 'ejs')
 app.set('views', './templates')
@@ -139,7 +147,7 @@ app.get('/contact', (req, res) => res.sendFile(__dirname + '/views/contact.html'
 
 
 // All Notes
-app.get('/allnotes',authMiddleware, async (req, res) => {
+app.get('/allnotes', requireLogin, async (req, res) => {
   try {
     if (!db) return res.status(500).send("Database not connected")
     const notes = db.collection('notes')
