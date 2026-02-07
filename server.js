@@ -224,14 +224,32 @@ app.post('/addnote', authMiddleware, async (req, res) => {
 })
 
 app.get('/admin', requireAdmin, async (req, res) => {
-  const users = await db.collection('users').find().toArray()
-  const notes = await db.collection('notes').find().toArray()
+  try {
+    const usersCollection = db.collection('users')
+    const notesCollection = db.collection('notes')
 
-  res.render('admin', {
-    user: req.session.user,
-    users,
-    notes
-  })
+    // fetch all users
+    const users = await usersCollection.find().toArray()
+    // fetch all notes
+    const notes = await notesCollection.find().toArray()
+
+    // attach username to each note
+    const notesWithUsernames = notes.map(note => {
+      const owner = users.find(u => u._id.toString() === note.userId?.toString())
+      return {
+        ...note,
+        ownerUsername: owner ? owner.username : "Unknown"
+      }
+    })
+
+    res.render('admin', {
+      user: req.session.user,
+      users,
+      notes: notesWithUsernames
+    })
+  } catch (err) {
+    res.status(500).send("Server error")
+  }
 })
 
 
