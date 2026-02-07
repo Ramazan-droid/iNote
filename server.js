@@ -74,6 +74,14 @@ function requireLogin(req, res, next) {
   next()
 }
 
+function requireAdmin(req, res, next) {
+  if (!req.session.user || req.session.user.role !== "admin") {
+    return res.status(403).send("Admins only")
+  }
+  next()
+}
+
+
 
 // -------------------- VIEW ENGINE --------------------
 app.set('view engine', 'ejs')
@@ -119,6 +127,8 @@ app.post('/signup', async (req, res) => {
   }
 })
 
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 
 // Login
 app.get('/login', (req, res) => res.render('login'))
@@ -126,6 +136,18 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body
 
   const users = db.collection('users')
+
+  if (
+    username === process.env.ADMIN_USERNAME &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    req.session.user = {
+      id: "admin",
+      username: username,
+      role: "admin"
+    }
+    return res.redirect('/admin')
+  }
   const user = await users.findOne({ username })
 
   if (!user) {
@@ -200,6 +222,18 @@ app.post('/addnote', authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 })
+
+app.get('/admin', requireAdmin, async (req, res) => {
+  const users = await db.collection('users').find().toArray()
+  const notes = await db.collection('notes').find().toArray()
+
+  res.render('admin', {
+    user: req.session.user,
+    users,
+    notes
+  })
+})
+
 
 
 // Update Note
