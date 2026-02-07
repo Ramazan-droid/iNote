@@ -115,7 +115,7 @@ app.post('/signup', async (req, res) => {
 
     // Save session with id, username, role
     req.session.user = {
-      id: result.insertedId,
+      id: result.insertedId.toString(),
       username,
       role: "user"         // ✅ include role in session
     }
@@ -233,7 +233,7 @@ app.get('/admin', requireAdmin, async (req, res) => {
 
     // attach username to each note
     const notesWithUsernames = notes.map(note => {
-      const owner = users.find(u => u._id.toString() === note.userId?.toString())
+      const owner = users.find(u => u._id === note.userId)
       return {
         ...note,
         ownerUsername: owner ? owner.username : "Unknown"
