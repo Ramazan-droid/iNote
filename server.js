@@ -251,8 +251,6 @@ app.get('/admin', requireAdmin, async (req, res) => {
   }
 })
 
-const { ObjectId } = require('mongodb')
-
 app.post('/admin/deletenote/:id', requireAdmin, async (req, res) => {
   try {
     const notesCollection = db.collection('notes')
