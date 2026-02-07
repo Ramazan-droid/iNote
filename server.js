@@ -228,9 +228,7 @@ app.get('/admin', requireAdmin, async (req, res) => {
     const usersCollection = db.collection('users')
     const notesCollection = db.collection('notes')
 
-    // fetch all users
     const users = await usersCollection.find().toArray()
-    // fetch all notes
     const notes = await notesCollection.find().toArray()
 
     // attach username to each note
@@ -248,11 +246,63 @@ app.get('/admin', requireAdmin, async (req, res) => {
       notes: notesWithUsernames
     })
   } catch (err) {
+    console.error(err)
     res.status(500).send("Server error")
   }
 })
 
+const { ObjectId } = require('mongodb')
 
+app.post('/admin/deletenote/:id', requireAdmin, async (req, res) => {
+  try {
+    const notesCollection = db.collection('notes')
+
+    // Delete the note by its _id
+    await notesCollection.deleteOne({ _id: new ObjectId(req.params.id) })
+
+    res.redirect('/admin') // back to admin dashboard
+  } catch (err) {
+    console.error(err)
+    res.status(500).send("Server error")
+  }
+})
+
+app.get('/admin/updatenote/:id', requireAdmin, async (req, res) => {
+  try {
+    const notesCollection = db.collection('notes')
+    const note = await notesCollection.findOne({ _id: new ObjectId(req.params.id) })
+    if (!note) return res.send("Note not found")
+
+    res.render('admin-update-note', { note, user: req.session.user })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send("Server error")
+  }
+})
+
+app.post('/admin/updatenote/:id', requireAdmin, async (req, res) => {
+  try {
+    const { title, content, is_pinned } = req.body
+    const notesCollection = db.collection('notes')
+
+    await notesCollection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      {
+        $set: {
+          title,
+          content,
+          is_pinned: is_pinned === "on",
+          updated_at: new Date()
+        }
+      }
+    )
+
+    res.redirect('/admin') // back to admin dashboard
+  } catch (err) {
+    console.error(err)
+    res.status(500).send("Server error")
+  }
+})
 
 // Update Note
 app.get('/updatenote/:id', authMiddleware, async (req, res) => {
