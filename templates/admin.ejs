@@ -4,48 +4,15 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-    }
+    body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 20px; }
     h1 { text-align: center; margin-bottom: 30px; }
-    .section {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-    }
-    .note-card {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      background: #fafafa;
-    }
-    .buttons {
-      margin-top: 5px;
-    }
-    .btn {
-      padding: 5px 12px;
-      margin-right: 5px;
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
-    }
+    .section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    table, th, td { border: 1px solid #ddd; }
+    th, td { padding: 10px; text-align: left; }
+    .note-card { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #fafafa; }
+    .buttons { margin-top: 5px; }
+    .btn { padding: 5px 12px; margin-right: 5px; cursor: pointer; border: none; border-radius: 4px; }
     .btn-update { background-color: #3498db; color: white; }
     .btn-delete { background-color: #e74c3c; color: white; }
   </style>
@@ -57,43 +24,51 @@
   <!-- USERS SECTION -->
   <div class="section">
     <h2>All Users</h2>
-    <table>
-      <tr>
-        <th>Username</th>
-        <th>Role</th>
-      </tr>
-      <% users.forEach(u => { %>
+    <% if (users && users.length > 0) { %>
+      <table>
         <tr>
-          <td><%= u.username %></td>
-          <td><%= u.role %></td>
+          <th>Username</th>
+          <th>Role</th>
         </tr>
-      <% }) %>
-    </table>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><%= u.username %></td>
+            <td><%= u.role ? u.role : "user" %></td>
+          </tr>
+        <% }) %>
+      </table>
+    <% } else { %>
+      <p>No users found.</p>
+    <% } %>
   </div>
 
   <!-- NOTES SECTION -->
   <div class="section">
     <h2>All Notes</h2>
-    <% notes.forEach(note => { %>
-      <div class="note-card">
-        <strong>Title:</strong> <%= note.title %><br>
-        <strong>Owner:</strong> <%= note.ownerUsername %><br>
-        <strong>Content:</strong>
-        <p><%= note.content %></p>
+    <% if (notes && notes.length > 0) { %>
+      <% notes.forEach(note => { %>
+        <div class="note-card">
+          <strong>Title:</strong> <%= note.title %><br>
+          <strong>Owner:</strong> <%= note.ownerUsername %><br>
+          <strong>Content:</strong>
+          <p><%= note.content %></p>
 
-        <div class="buttons">
-          <!-- UPDATE NOTE -->
-          <form action="/admin/updatenote/<%= note._id %>" method="GET" style="display:inline;">
-            <button class="btn btn-update">Update</button>
-          </form>
+          <div class="buttons">
+            <!-- UPDATE NOTE -->
+            <form action="/admin/updatenote/<%= note._id %>" method="GET" style="display:inline;">
+              <button class="btn btn-update">Update</button>
+            </form>
 
-          <!-- DELETE NOTE -->
-          <form action="/admin/deletenote/<%= note._id %>" method="POST" style="display:inline;">
-            <button class="btn btn-delete">Delete</button>
-          </form>
+            <!-- DELETE NOTE -->
+            <form action="/admin/deletenote/<%= note._id %>" method="POST" style="display:inline;">
+              <button class="btn btn-delete">Delete</button>
+            </form>
+          </div>
         </div>
-      </div>
-    <% }) %>
+      <% }) %>
+    <% } else { %>
+      <p>No notes found.</p>
+    <% } %>
   </div>
 
 </body>
