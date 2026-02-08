@@ -233,7 +233,7 @@ app.get('/admin', requireAdmin, async (req, res) => {
 
     // attach username to each note
     const notesWithUsernames = notes.map(note => {
-      const owner = users.find(u => u._id === note.userId)
+      const owner = users.find(u => u._id.toString() === note.userId.toString())
       return {
         ...note,
         ownerUsername: owner ? owner.username : "Unknown"
